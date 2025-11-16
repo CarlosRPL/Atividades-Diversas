@@ -1,4 +1,4 @@
-#Assembler Risc-V 32I didático
+# Assembler Risc-V 32I didático
 
   Esta atividade eu desenvolvi um assembler simples para o conjunto de instruções RISC-V.
 O objetivo é criar um programa em Python capaz de ler um arquivo de
