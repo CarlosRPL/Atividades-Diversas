@@ -558,28 +558,22 @@ def assemble(lines):
 # ---------------------------
 # I/O?
 # ---------------------------
-#analizar direito dps oq o deep seek fez
 def write_text_bin_file(text_bin, data_bin, out_txt_path, raw_bin_path=None):
-    # write textual binary: text instructions as 32-bit binary lines, then data bytes as bytes with addresses noted
     with open(out_txt_path, 'w') as f:
         f.write("# Text segment (addr: 32-bit binary)\n")
         for addr, word in text_bin.items():
             f.write(f"{hex(addr)}: {int_to_bin(word,32)}\n")
         f.write("\n# Data bytes (addr: byte)\n")
-        # group by contiguous regions
         addrs = sorted(data_bin.keys())
         for a in addrs:
             f.write(f"{hex(a)}: {int(data_bin[a])}\n")
     if raw_bin_path:
-        # combine text and data in two separate raw files for simplicity: text.raw (instructions little-endian) and data.raw
-        # We'll write a single raw file with text then data segments padded? Simpler: produce two files
         txt_raw = raw_bin_path + ".text.raw"
         data_raw = raw_bin_path + ".data.raw"
         with open(txt_raw, 'wb') as ft:
             for addr, word in text_bin.items():
                 ft.write(struct.pack('<I', word))
         with open(data_raw, 'wb') as fd:
-            # write bytes starting from lowest address to highest contiguous filling gaps with zeros
             if data_bin:
                 min_a = min(data_bin.keys()); max_a = max(data_bin.keys())
                 for a in range(min_a, max_a+1):
@@ -605,4 +599,5 @@ def main():
         print(f"  {k} -> {hex(v)}")
 
 if __name__ == '__main__':
+
     main()
